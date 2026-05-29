@@ -6,7 +6,7 @@ Generate a **restaurant name** and **menu items** using **OpenAI** or **Gemini**
 
 ```bash
 pip install -r requirements.txt
-streamlit run RestaurantNameGenerator/main.py
+streamlit run main.py
 ```
 
 ## API keys
@@ -21,6 +21,6 @@ If deploying on Streamlit Community Cloud, add secrets:
 ## Deploy (Streamlit Community Cloud)
 
 - **Repo**: this GitHub repository
-- **Main file path**: `RestaurantNameGenerator/main.py`
+- **Main file path**: `main.py`
 - **Python version**: 3.10+ recommended
 
