@@ -20,7 +20,17 @@ with st.sidebar:
     if provider == "OpenAI":
         model = st.text_input("Model", value="gpt-4o-mini")
     else:
-        model = st.text_input("Model", value="gemini-1.5-flash")
+        model = st.selectbox(
+            "Model",
+            (
+                "gemini-2.5-flash",
+                "gemini-3.5-flash",
+                "gemini-3.1-flash-lite",
+                "gemini-2.0-flash",
+            ),
+            index=0,
+            help="gemini-1.5-flash is retired and will not work.",
+        )
 
     temperature = st.slider("Temperature", min_value=0.0, max_value=1.0, value=0.7, step=0.1)
 
@@ -34,14 +44,18 @@ if generate:
         st.error("Please enter your API key in the sidebar.")
         st.stop()
 
-    with st.spinner("Generating..."):
-        response = langchain_helper.generate_restaurant_name_and_items(
-            cuisine,
-            provider="openai" if provider == "OpenAI" else "gemini",
-            api_key=api_key.strip(),
-            model=model.strip(),
-            temperature=float(temperature),
-        )
+    try:
+        with st.spinner("Generating..."):
+            response = langchain_helper.generate_restaurant_name_and_items(
+                cuisine,
+                provider="openai" if provider == "OpenAI" else "gemini",
+                api_key=api_key.strip(),
+                model=str(model).strip(),
+                temperature=float(temperature),
+            )
+    except Exception as exc:
+        st.error(str(exc))
+        st.stop()
 
     restaurant_name = (response.get("restaurant_name") or "").strip()
     menu_raw = (response.get("menu_items") or "").strip()
